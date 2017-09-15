@@ -28,7 +28,7 @@ else
     los_url="https://gitlab.s3root.ovh/LineageOS/docker_los_build/raw/master/utils/los"
     args="bash run.sh docker"
     export LOS_EXTRA_ARGS="-v $(cd $(dirname $0) && pwd -P)/$(basename $0):/usr/local/bin/run.sh:ro"
-    export LOS_IMAGE="benlue/los:cm-14.1"
+    export LOS_IMAGE="benlue/los-build:latest"
 
     #
     # Try to invoke the los wrapper with the following priority:
