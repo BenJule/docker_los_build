@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Build tools
 RUN apt-get update && \
     apt-get -y --no-install-recommends install \
-    apt-utils openjdk-8-jdk python bc yasm rsync \
+    apt-utils sudo openjdk-8-jdk python bc yasm rsync \
     schedtool imagemagick git-core gnupg flex bison \
     gperf build-essential zip curl zlib1g-dev \
     gcc-multilib g++-multilib libc6-dev-i386 \
