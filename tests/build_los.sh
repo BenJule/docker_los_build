@@ -4,7 +4,7 @@
 #
 # Example invocation:
 #
-# $ AOSP_VOL=$PWD/build ./build-nougat.sh
+# $ LOS_VOL=$PWD/build ./build-nougat.sh
 #
 set -ex
 
@@ -22,34 +22,34 @@ if [ "$1" = "docker" ]; then
     prebuilts/misc/linux-x86/ccache/ccache -M 10G
 
     source build/envsetup.sh
-    lunch aosp_arm-eng
+    lunch los_arm-eng
     make -j $cpus
 else
-    aosp_url="https://raw.githubusercontent.com/kylemanna/docker-aosp/master/utils/aosp"
+    los_url="https://gitlab.s3root.ovh/LineageOS/docker_los_build/raw/master/utils/los"
     args="bash run.sh docker"
-    export AOSP_EXTRA_ARGS="-v $(cd $(dirname $0) && pwd -P)/$(basename $0):/usr/local/bin/run.sh:ro"
-    export AOSP_IMAGE="kylemanna/aosp:7.0-nougat"
+    export LOS_EXTRA_ARGS="-v $(cd $(dirname $0) && pwd -P)/$(basename $0):/usr/local/bin/run.sh:ro"
+    export LOS_IMAGE="kylemanna/los:7.0-nougat"
 
     #
-    # Try to invoke the aosp wrapper with the following priority:
+    # Try to invoke the los wrapper with the following priority:
     #
-    # 1. If AOSP_BIN is set, use that
-    # 2. If aosp is found in the shell $PATH
+    # 1. If LOS_BIN is set, use that
+    # 2. If los is found in the shell $PATH
     # 3. Grab it from the web
     #
-    if [ -n "$AOSP_BIN" ]; then
-        $AOSP_BIN $args
-    elif [ -x "../utils/aosp" ]; then
-        ../utils/aosp $args
-    elif [ -n "$(type -P aosp)" ]; then
-        aosp $args
+    if [ -n "$LOS_BIN" ]; then
+        $LOS_BIN $args
+    elif [ -x "../utils/los" ]; then
+        ../utils/los $args
+    elif [ -n "$(type -P los)" ]; then
+        los $args
     else
         if [ -n "$(type -P curl)" ]; then
-            bash <(curl -s $aosp_url) $args
+            bash <(curl -s $los_url) $args
         elif [ -n "$(type -P wget)" ]; then
-            bash <(wget -q $aosp_url -O -) $args
+            bash <(wget -q $los_url -O -) $args
         else
-            echo "Unable to run the aosp binary"
+            echo "Unable to run the los binary"
         fi
     fi
 fi
