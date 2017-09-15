@@ -1,9 +1,9 @@
 version: "2"
 
 services:
-  aosp:
-    image: kylemanna/aosp:latest
+  los:
+    image: benlue/los-build:latest
     volumes:
-      - ~/aosp/ccache:/tmp/ccache
-      - ~/aosp:/aosp
+      - ~/los/ccache:/tmp/ccache
+      - ~/los:/los
       - ~/.gitconfig:/root/.gitconfig
