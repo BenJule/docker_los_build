@@ -34,7 +34,7 @@ cp /root/.ssh/config /home/los/.ssh/config && \
 chown los:los -R /home/los/.ssh &&
 echo "$msg - done"
 
-msg="docker_entrypoint: Creating /tmp/ccache and /aosp directory" && echo $msg
+msg="docker_entrypoint: Creating /tmp/ccache and /los directory" && echo $msg
 mkdir -p /tmp/ccache /los
 chown los:los /tmp/ccache /los
 echo "$msg - done"
@@ -47,6 +47,6 @@ if [ -z "$args" ]; then
   args="bash"
 fi
 
-# Execute command as `aosp` user
+# Execute command as `los` user
 export HOME=/home/los
 exec sudo -E -u los $args
