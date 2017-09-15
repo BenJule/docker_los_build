@@ -22,21 +22,21 @@ export CCACHE_DIR=/tmp/ccache
 export USE_CCACHE=1
 
 msg="docker_entrypoint: Creating user UID/GID [$USER_ID/$GROUP_ID]" && echo $msg
-groupadd -g $GROUP_ID -r aosp && \
-useradd -u $USER_ID --create-home -r -g aosp aosp
+groupadd -g $GROUP_ID -r los && \
+useradd -u $USER_ID --create-home -r -g los los
 echo "$msg - done"
 
 msg="docker_entrypoint: Copying .gitconfig and .ssh/config to new user home" && echo $msg
-cp /root/.gitconfig /home/aosp/.gitconfig && \
-chown aosp:aosp /home/aosp/.gitconfig && \
-mkdir -p /home/aosp/.ssh && \
-cp /root/.ssh/config /home/aosp/.ssh/config && \
-chown aosp:aosp -R /home/aosp/.ssh &&
+cp /root/.gitconfig /home/los/.gitconfig && \
+chown los:los /home/los/.gitconfig && \
+mkdir -p /home/los/.ssh && \
+cp /root/.ssh/config /home/los/.ssh/config && \
+chown los:los -R /home/los/.ssh &&
 echo "$msg - done"
 
 msg="docker_entrypoint: Creating /tmp/ccache and /aosp directory" && echo $msg
-mkdir -p /tmp/ccache /aosp
-chown aosp:aosp /tmp/ccache /aosp
+mkdir -p /tmp/ccache /los
+chown los:los /tmp/ccache /los
 echo "$msg - done"
 
 echo ""
@@ -48,5 +48,5 @@ if [ -z "$args" ]; then
 fi
 
 # Execute command as `aosp` user
-export HOME=/home/aosp
-exec sudo -E -u aosp $args
+export HOME=/home/los
+exec sudo -E -u los $args
