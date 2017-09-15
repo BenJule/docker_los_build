@@ -55,7 +55,7 @@ How it Works
 ------------
 
 The Dockerfile contains the minimal packages necessary to build Android based
-on the main Ubuntu base image.
+on the main Debian latest image.
 
 The `los` wrapper is a simple wrapper to simplify invocation of the Docker
 image.  The wrapper ensures that a volume mount is accessible and has valid
