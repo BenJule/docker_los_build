@@ -1,15 +1,15 @@
-Android Open Source Project Docker Build Environment
+LineageOS Docker Build Environment
 ====================================================
 
 [![Docker Stars](https://img.shields.io/docker/stars/benlue/los-build.svg)](https://hub.docker.com/r/benlue/los-build/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/benlue/los-build.svg)](https://hub.docker.com/r/benlue/los-build/)
 [![ImageLayers](https://images.microbadger.com/badges/image/benlue/los-build.svg)](https://microbadger.com/#/images/benlue/los-build)
 
-Minimal build environment for AOSP with handy automation wrapper scripts.
+Minimal build environment for LOS with handy automation wrapper scripts.
 
 Developers can use the Docker image to build directly while running the
 distribution of choice, without having to worry about breaking the delicate
-AOSP build due to package updates as is sometimes common on bleeding edge
+LOS build due to package updates as is sometimes common on bleeding edge
 rolling distributions like Arch Linux.
 
 Production build servers and integration test servers should also use the same
@@ -19,7 +19,7 @@ environment.  The devs will catch the issues with build environment first.
 
 This works well on Linux.  Running this via `boot2docker` (and friends) will
 result in a very painful performacne hit due to VirtualBox's `vboxsf` shared
-folder service which works terrible for **very** large file shares like AOSP.
+folder service which works terrible for **very** large file shares like LOS.
 It might work, but consider yourself warned.  If you're aware of another way to
 get around this, send a pull request!
 
@@ -30,14 +30,14 @@ Quickstart
 For the terribly impatient.
 
 1. Make a directory to work and go there.
-2. Export the current directory as the persistent file store for the `aosp`
+2. Export the current directory as the persistent file store for the `los`
    wrapper.
 3. Run a self contained build script, which does:
-    1. Attempts to fetch the `aosp` wrapper if not found locally.
-    2. Runs the `aosp` wrapper with an extra argument for the docker binary and
+    1. Attempts to fetch the `los` wrapper if not found locally.
+    2. Runs the `los` wrapper with an extra argument for the docker binary and
        hints to the same script that when run later it's running in the docker
        container.
-    3. The aosp wrapper then does it's magic which consists of fetching the
+    3. The los wrapper then does it's magic which consists of fetching the
        docker image if not found and forms all the necessary docker run
        arguments seamlessly.
     4. The docker container runs the other half the build script which
@@ -66,7 +66,7 @@ so that private git repositories can be accessed if needed.
 The intention is to use `los` to prefix all commands one would run in the
 Docker container.  For example to run `repo sync` in the Docker container:
 
-    aosp repo sync -j2
+    los repo sync -j2
 
 The `los` wrapper doesn't work well with setting up environments, but with
 some bash magic, this can be side stepped with short little scripts.  See
