@@ -1,9 +1,9 @@
 Android Open Source Project Docker Build Environment
 ====================================================
 
-[![Docker Stars](https://img.shields.io/docker/stars/kylemanna/aosp.svg)](https://hub.docker.com/r/kylemanna/aosp/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/kylemanna/aosp.svg)](https://hub.docker.com/r/kylemanna/aosp/)
-[![ImageLayers](https://images.microbadger.com/badges/image/kylemanna/aosp.svg)](https://microbadger.com/#/images/kylemanna/aosp)
+[![Docker Stars](https://img.shields.io/docker/stars/benlue/los-build.svg)](https://hub.docker.com/r/kylemanna/aosp/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/benlue/los-build.svg)](https://hub.docker.com/r/kylemanna/aosp/)
+[![ImageLayers](https://images.microbadger.com/badges/image/benlue/los-build.svg)](https://microbadger.com/#/images/kylemanna/aosp)
 
 Minimal build environment for AOSP with handy automation wrapper scripts.
 
