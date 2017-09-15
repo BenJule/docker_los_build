@@ -2,7 +2,7 @@
 #
 # Simple LOS wrapper to run commands in an LOS docker container
 #
-# Author: Kyle Manna <benlue@s3root.ovh>
+# Author: BenLue <benlue@s3root.ovh>
 #
 
 set -e
