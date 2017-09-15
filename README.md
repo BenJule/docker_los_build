@@ -1,9 +1,9 @@
 Android Open Source Project Docker Build Environment
 ====================================================
 
-[![Docker Stars](https://img.shields.io/docker/stars/benlue/los-build.svg)](https://hub.docker.com/r/kylemanna/aosp/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/benlue/los-build.svg)](https://hub.docker.com/r/kylemanna/aosp/)
-[![ImageLayers](https://images.microbadger.com/badges/image/benlue/los-build.svg)](https://microbadger.com/#/images/kylemanna/aosp)
+[![Docker Stars](https://img.shields.io/docker/stars/benlue/los-build.svg)](https://hub.docker.com/r/benlue/los-build/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/benlue/los-build.svg)](https://hub.docker.com/r/benlue/los-build/)
+[![ImageLayers](https://images.microbadger.com/badges/image/benlue/los-build.svg)](https://microbadger.com/#/images/benlue/los-build)
 
 Minimal build environment for AOSP with handy automation wrapper scripts.
 
@@ -44,10 +44,10 @@ For the terribly impatient.
        initializes the repo, fetches all source code, and builds.
     5. In parallel you are expected to be drinking because I save you some time.
 
-            mkdir nougat ; cd nougat
-            export AOSP_VOL=$PWD
-            curl -O https://raw.githubusercontent.com/kylemanna/docker-aosp/master/tests/build-nougat.sh
-            bash ./build-nougat.sh
+            mkdir los ; cd los
+            export LOS_VOL=$PWD
+            curl -O https://gitlab.s3root.ovh/LineageOS/docker_los_build/raw/master/tests/build_los.sh
+            bash ./build_los.sh
 
     This takes about 2 hours to download and build on i5-2500k with 100Mb/s network connection.
 
@@ -57,20 +57,20 @@ How it Works
 The Dockerfile contains the minimal packages necessary to build Android based
 on the main Ubuntu base image.
 
-The `aosp` wrapper is a simple wrapper to simplify invocation of the Docker
+The `los` wrapper is a simple wrapper to simplify invocation of the Docker
 image.  The wrapper ensures that a volume mount is accessible and has valid
-permissions for the `aosp` user in the Docker image (this unfortunately
+permissions for the `los` user in the Docker image (this unfortunately
 requires sudo).  It also forwards an ssh-agent in to the Docker container
 so that private git repositories can be accessed if needed.
 
-The intention is to use `aosp` to prefix all commands one would run in the
+The intention is to use `los` to prefix all commands one would run in the
 Docker container.  For example to run `repo sync` in the Docker container:
 
     aosp repo sync -j2
 
-The `aosp` wrapper doesn't work well with setting up environments, but with
+The `los` wrapper doesn't work well with setting up environments, but with
 some bash magic, this can be side stepped with short little scripts.  See
-`tests/build-nougat.sh` for an example of a complete fetch and build of AOSP.
+`tests/build-los.sh` for an example of a complete fetch and build of LineageOS.
 
 [Docker Compose][]
 ------
@@ -81,13 +81,13 @@ A [Docker Compose][] file is provided in the root of this repository, you can tw
 version: "2"
 
 services:
-  aosp:
-    image: kylemanna/aosp:latest
+  los:
+    image: benlue/los-build:latest
     volumes:
       - /tmp/ccache:/ccache
-      - ~/aosp:/aosp
+      - ~/los:/los
 ```
-Example run: `docker-compose run --rm aosp repo sync -j4` -- your android build directory will be in `~/aosp`.
+Example run: `docker-compose run --rm los repo sync -j4` -- your android build directory will be in `~/los`.
 
 Issues
 ------
