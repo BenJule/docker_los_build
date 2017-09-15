@@ -9,8 +9,8 @@
 set -ex
 
 if [ "$1" = "docker" ]; then
-    TEST_BRANCH=${TEST_BRANCH:-android-7.0.0_r14}
-    TEST_URL=${TEST_URL:-https://android.googlesource.com/platform/manifest}
+    TEST_BRANCH=${TEST_BRANCH:-cm-14.1}
+    TEST_URL=${TEST_URL:-https://github.com/LineageOS/android}
 
     cpus=$(grep ^processor /proc/cpuinfo | wc -l)
 
@@ -19,16 +19,16 @@ if [ "$1" = "docker" ]; then
     # Use default sync '-j' value embedded in manifest file to be polite
     repo sync
 
-    prebuilts/misc/linux-x86/ccache/ccache -M 10G
+    prebuilts/misc/linux-x86/ccache/ccache -M 4G
 
     source build/envsetup.sh
-    lunch los_arm-eng
+    lunch jfltexx_arm-eng
     make -j $cpus
 else
     los_url="https://gitlab.s3root.ovh/LineageOS/docker_los_build/raw/master/utils/los"
     args="bash run.sh docker"
     export LOS_EXTRA_ARGS="-v $(cd $(dirname $0) && pwd -P)/$(basename $0):/usr/local/bin/run.sh:ro"
-    export LOS_IMAGE="kylemanna/los:7.0-nougat"
+    export LOS_IMAGE="benlue/los:cm-14.1"
 
     #
     # Try to invoke the los wrapper with the following priority:
