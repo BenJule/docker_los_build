@@ -25,7 +25,7 @@ if [ "$1" = "docker" ]; then
     lunch jfltexx_arm-eng
     make -j $cpus
 else
-    los_url="https://gitlab.s3root.ovh/LineageOS/docker_los_build/raw/master/utils/los"
+    los_url="https://raw.githubusercontent.com/BenJule/docker_los_build/master/utils/los"
     args="bash run.sh docker"
     export LOS_EXTRA_ARGS="-v $(cd $(dirname $0) && pwd -P)/$(basename $0):/usr/local/bin/run.sh:ro"
     export LOS_IMAGE="benlue/los-build:latest"
