@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Arguments defenition
 ARG APT_MIRROR="debian.proxad.net"
-ARG external_dir="include"
+ARG external_dir="utils"
 ARG internal_dir=".init"
 ARG work_dir="android"
 ARG shared_dir="shared"
