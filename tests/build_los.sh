@@ -9,7 +9,7 @@
 set -ex
 
 if [ "$1" = "docker" ]; then
-    TEST_BRANCH=${TEST_BRANCH:-cm-14.1}
+    TEST_BRANCH=${TEST_BRANCH:-lineage-17.1}
     TEST_URL=${TEST_URL:-https://github.com/LineageOS/android}
 
     cpus=$(grep ^processor /proc/cpuinfo | wc -l)
