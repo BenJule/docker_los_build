@@ -1,48 +1,112 @@
-#
-# Minimum Docker image to build Android AOSP
-#
-FROM debian:latest
+FROM debian:buster
 
 # Metainformation
-LABEL name="los_build" \
+LABEL name="lineageos-docker" \
       maintainer="benlue@s3root.ovh" \
       version="0.1"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Build tools
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install \
-    apt-utils sudo openjdk-8-jdk python bc yasm rsync \
-    schedtool imagemagick git-core gnupg flex bison \
-    gperf build-essential zip curl zlib1g-dev \
-    gcc-multilib g++-multilib libc6-dev-i386 \
-    lib32ncurses5-dev x11proto-core-dev \
-    libx11-dev lib32z-dev ccache libgl1-mesa-dev \
-    libxml2-utils xsltproc \
-    unzip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/* && \
-    rm -rf /var/tmp/*
-    
-ADD https://commondatastorage.googleapis.com/git-repo-downloads/repo /usr/local/bin/
-RUN chmod 755 /usr/local/bin/*
+# Arguments defenition
+ARG APT_MIRROR="debian.proxad.net"
+ARG external_dir="include"
+ARG internal_dir=".init"
+ARG work_dir="android"
+ARG shared_dir="shared"
+ARG user="docker-buildbox"
 
-# Install latest version of JDK
-# See http://source.android.com/source/initializing.html#setting-up-a-linux-build-environment
-WORKDIR /tmp
+# Environment variables defenition (do not rearrange!)
+ENV USER=$user
+ENV USER_HOME=/home/$USER
+ENV SHARED_DIR=$USER_HOME/$shared_dir
+ENV WORK_DIR=$USER_HOME/$work_dir
+ENV CCACHE_DIR=$WORK_DIR/.ccache
+ENV INIT_DIR=$USER_HOME/$internal_dir
+ENV OUT_DIR=$WORK_DIR/out
 
-# All builds will be done by user aosp
-COPY gitconfig /root/.gitconfig
-COPY ssh_config /root/.ssh/config
+# allow replacing httpredir or deb mirror
+RUN sed -ri "s/(httpredir|deb).debian.org/$APT_MIRROR/g" /etc/apt/sources.list
 
-# The persistent data will be in these two directories, everything else is
-# considered to be ephemeral
-VOLUME ["/tmp/ccache", "/los"]
+# Install commons build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+    bc \
+    bison \
+    build-essential \
+    ca-certificates \
+    curl \
+    flex \
+    g++-multilib \
+    gcc-multilib \
+    git \
+    gnupg \
+    gperf \
+    imagemagick \
+    lib32ncurses5-dev \
+    lib32readline-dev \
+    lib32z1-dev \
+    #libesd0-dev \
+    liblz4-tool \
+    libncurses5-dev \
+    libsdl1.2-dev \
+    libssl-dev \
+    libwxgtk3.0-dev \
+    libxml2 \
+    libxml2-utils \
+    lzop \
+    #openjdk-8-jdk \
+    pngcrush \
+    python \
+    rsync \
+    schedtool \
+    squashfs-tools \
+    unzip \
+    xsltproc \
+    zip \
+    zlib1g-dev
 
-# Work in the build directory, repo is expected to be init'd here
-WORKDIR /los
+# Install additional useful stuff
+RUN apt-get install -y --no-install-recommends \
+    bash-completion \
+    bsdmainutils \
+    ccache \
+    file \
+    mc \
+    nano \
+    rsync \
+    screen \
+    screenfetch \
+    ssh \
+    sudo \
+    tig \
+    wget
 
-COPY utils/docker_entrypoint.sh /root/docker_entrypoint.sh
-ENTRYPOINT ["/root/docker_entrypoint.sh"]
+# Add new user
+RUN useradd -ms /bin/bash $USER && \
+    echo "$USER ALL=NOPASSWD: ALL" > /etc/sudoers.d/$USER
+
+# Initialize environment
+ADD $external_dir $INIT_DIR
+RUN mkdir -p $USER_HOME/bin && \
+    curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
+    chmod a+x $USER_HOME/bin/repo && \
+    wget -P $INIT_DIR https://dl.google.com/android/repository/platform-tools-latest-linux.zip && \
+    unzip $INIT_DIR/platform-tools-latest-linux.zip -d $INIT_DIR && \
+    mkdir -p $SHARED_DIR && \
+    mkdir -p $CCACHE_DIR && \
+    mkdir -p $OUT_DIR && \
+    chmod -R 775 $USER_HOME && \
+    chown -R $USER:$USER $USER_HOME && \
+    echo "source $INIT_DIR/startup.sh" >> $USER_HOME/.profile
+
+# Volumes defenition
+VOLUME $SHARED_DIR
+VOLUME $WORK_DIR
+VOLUME $CCACHE_DIR
+VOLUME $OUT_DIR
+
+# Configure start up
+USER $USER
+WORKDIR $WORK_DIR
+ENTRYPOINT ["/bin/bash"]
+CMD ["-l"]
